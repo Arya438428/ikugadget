@@ -21,6 +21,7 @@ interface JournalTableProps {
   data: JournalEntry[];
   onRefresh: () => void;
   onEdit: (entry: JournalEntry) => void;
+  isAdmin: boolean;
 }
 
 const formatRp = (n: number) => `Rp ${n.toLocaleString("id-ID")}`;
@@ -34,7 +35,7 @@ const unitBadgeColor = (type: string) => {
   }
 };
 
-export default function JournalTable({ data, onRefresh, onEdit }: JournalTableProps) {
+export default function JournalTable({ data, onRefresh, onEdit, isAdmin }: JournalTableProps) {
   const handleDelete = async (id: string) => {
     if (!confirm("Hapus data ini?")) return;
     const { error } = await supabase.from("journal").delete().eq("id", id);
@@ -49,7 +50,7 @@ export default function JournalTable({ data, onRefresh, onEdit }: JournalTablePr
   if (data.length === 0) {
     return (
       <div className="text-center py-12 text-muted-foreground">
-        Belum ada data jurnal. Klik "Tambah Jurnal" untuk memulai.
+        Belum ada data jurnal.{isAdmin ? ' Klik "Tambah Jurnal" untuk memulai.' : ""}
       </div>
     );
   }
@@ -70,7 +71,7 @@ export default function JournalTable({ data, onRefresh, onEdit }: JournalTablePr
             <TableHead className="text-right">Profit</TableHead>
             <TableHead className="text-right">Seller 50%</TableHead>
             <TableHead className="text-right">Toko 50%</TableHead>
-            <TableHead className="text-right">Aksi</TableHead>
+            {isAdmin && <TableHead className="text-right">Aksi</TableHead>}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -91,16 +92,18 @@ export default function JournalTable({ data, onRefresh, onEdit }: JournalTablePr
                 </TableCell>
                 <TableCell className="text-right">{formatRp(profit / 2)}</TableCell>
                 <TableCell className="text-right">{formatRp(profit / 2)}</TableCell>
-                <TableCell className="text-right">
-                  <div className="flex gap-1 justify-end">
-                    <Button variant="ghost" size="icon" onClick={() => onEdit(entry)}>
-                      <Pencil className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="icon" onClick={() => handleDelete(entry.id)}>
-                      <Trash2 className="h-4 w-4 text-destructive" />
-                    </Button>
-                  </div>
-                </TableCell>
+                {isAdmin && (
+                  <TableCell className="text-right">
+                    <div className="flex gap-1 justify-end">
+                      <Button variant="ghost" size="icon" onClick={() => onEdit(entry)}>
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <Button variant="ghost" size="icon" onClick={() => handleDelete(entry.id)}>
+                        <Trash2 className="h-4 w-4 text-destructive" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                )}
               </TableRow>
             );
           })}

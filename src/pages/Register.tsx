@@ -4,13 +4,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { signUp } from "@/lib/auth";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Smartphone } from "lucide-react";
 
 export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState<"admin" | "seller">("seller");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -18,9 +21,12 @@ export default function Register() {
     e.preventDefault();
     setLoading(true);
     try {
-      await signUp(email, password);
-      toast.success("Akun berhasil dibuat! Silakan cek email untuk konfirmasi.");
-      navigate("/login");
+      const data = await signUp(email, password);
+      if (data.user) {
+        await supabase.from("user_roles").insert({ user_id: data.user.id, role });
+      }
+      toast.success("Akun berhasil dibuat!");
+      navigate("/");
     } catch (err: any) {
       toast.error(err.message || "Gagal mendaftar");
     } finally {
@@ -42,26 +48,21 @@ export default function Register() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="email@contoh.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
+              <Input id="email" type="email" placeholder="email@contoh.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Min. 6 karakter"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                minLength={6}
-              />
+              <Input id="password" type="password" placeholder="Min. 6 karakter" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
+            </div>
+            <div className="space-y-2">
+              <Label>Role</Label>
+              <Select value={role} onValueChange={(v) => setRole(v as "admin" | "seller")}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="admin">Admin</SelectItem>
+                  <SelectItem value="seller">Seller</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Memproses..." : "Daftar"}
@@ -69,9 +70,7 @@ export default function Register() {
           </form>
           <p className="mt-4 text-center text-sm text-muted-foreground">
             Sudah punya akun?{" "}
-            <Link to="/login" className="text-primary hover:underline font-medium">
-              Masuk
-            </Link>
+            <Link to="/login" className="text-primary hover:underline font-medium">Masuk</Link>
           </p>
         </CardContent>
       </Card>
