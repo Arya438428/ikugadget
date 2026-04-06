@@ -8,6 +8,7 @@ import { useRole } from "@/hooks/useRole";
 import { useSellerVisitLogger } from "@/hooks/useSellerVisitLogger";
 import { signOut } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
+import JournalFilters from "@/components/JournalFilters";
 import JournalForm from "@/components/JournalForm";
 import JournalTable from "@/components/JournalTable";
 import WeeklySalesChart from "@/components/WeeklySalesChart";
@@ -22,6 +23,7 @@ export default function Dashboard() {
   const { isAdmin, role } = useRole();
   const navigate = useNavigate();
   const [data, setData] = useState<any[]>([]);
+  const [filteredData, setFilteredData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [editData, setEditData] = useState<any>(null);
   const [editOpen, setEditOpen] = useState(false);
@@ -167,10 +169,12 @@ export default function Dashboard() {
           {isAdmin && <JournalForm onSuccess={fetchData} />}
         </div>
 
+        <JournalFilters data={data} onFiltered={setFilteredData} />
+
         {loading ? (
           <div className="text-center py-8 text-muted-foreground">Memuat data...</div>
         ) : (
-          <JournalTable data={data} onRefresh={fetchData} onEdit={handleEdit} isAdmin={isAdmin} />
+          <JournalTable data={filteredData} onRefresh={fetchData} onEdit={handleEdit} isAdmin={isAdmin} />
         )}
 
         {isAdmin && (
