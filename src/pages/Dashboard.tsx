@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
+import { useRole } from "@/hooks/useRole";
 import { signOut } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import JournalForm from "@/components/JournalForm";
@@ -11,6 +13,7 @@ import { LogOut, Smartphone, TrendingUp, ShoppingBag, DollarSign } from "lucide-
 
 export default function Dashboard() {
   const { user } = useAuth();
+  const { isAdmin, role } = useRole();
   const navigate = useNavigate();
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -55,7 +58,10 @@ export default function Dashboard() {
             </div>
             <div>
               <h1 className="text-lg font-bold">Iku Gadget & Stuff</h1>
-              <p className="text-xs text-muted-foreground">{user?.email}</p>
+              <div className="flex items-center gap-2">
+                <p className="text-xs text-muted-foreground">{user?.email}</p>
+                {role && <Badge variant="secondary" className="text-xs">{role}</Badge>}
+              </div>
             </div>
           </div>
           <Button variant="ghost" size="sm" onClick={handleLogout}>
@@ -65,7 +71,6 @@ export default function Dashboard() {
       </header>
 
       <main className="container py-6 space-y-6">
-        {/* Summary cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card>
             <CardContent className="flex items-center gap-4 p-4">
@@ -107,25 +112,25 @@ export default function Dashboard() {
           </Card>
         </div>
 
-        {/* Journal */}
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold">Jurnal Penjualan</h2>
-          <JournalForm onSuccess={fetchData} />
+          {isAdmin && <JournalForm onSuccess={fetchData} />}
         </div>
 
         {loading ? (
           <div className="text-center py-8 text-muted-foreground">Memuat data...</div>
         ) : (
-          <JournalTable data={data} onRefresh={fetchData} onEdit={handleEdit} />
+          <JournalTable data={data} onRefresh={fetchData} onEdit={handleEdit} isAdmin={isAdmin} />
         )}
 
-        {/* Edit dialog */}
-        <JournalForm
-          onSuccess={fetchData}
-          editData={editData}
-          open={editOpen}
-          onOpenChange={(o) => { setEditOpen(o); if (!o) setEditData(null); }}
-        />
+        {isAdmin && (
+          <JournalForm
+            onSuccess={fetchData}
+            editData={editData}
+            open={editOpen}
+            onOpenChange={(o) => { setEditOpen(o); if (!o) setEditData(null); }}
+          />
+        )}
       </main>
     </div>
   );
