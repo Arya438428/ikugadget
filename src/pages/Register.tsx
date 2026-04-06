@@ -23,7 +23,14 @@ export default function Register() {
     try {
       const data = await signUp(email, password);
       if (data.user) {
-        await supabase.from("user_roles").insert({ user_id: data.user.id, role });
+        const { error: roleError } = await supabase.from("user_roles").insert({ user_id: data.user.id, role });
+        if (roleError) {
+          if (roleError.message?.includes("admin")) {
+            toast.error("Sudah ada admin terdaftar. Hanya boleh 1 admin.");
+            return;
+          }
+          throw roleError;
+        }
       }
       toast.success("Akun berhasil dibuat!");
       navigate("/");

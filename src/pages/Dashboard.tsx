@@ -5,11 +5,15 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
 import { useRole } from "@/hooks/useRole";
+import { useSellerVisitLogger } from "@/hooks/useSellerVisitLogger";
 import { signOut } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import JournalForm from "@/components/JournalForm";
 import JournalTable from "@/components/JournalTable";
-import { LogOut, Smartphone, TrendingUp, ShoppingBag, DollarSign } from "lucide-react";
+import WeeklySalesChart from "@/components/WeeklySalesChart";
+import NotificationBell from "@/components/NotificationBell";
+import { LogOut, TrendingUp, ShoppingBag, DollarSign } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -19,6 +23,8 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [editData, setEditData] = useState<any>(null);
   const [editOpen, setEditOpen] = useState(false);
+
+  useSellerVisitLogger();
 
   const fetchData = useCallback(async () => {
     if (!user) return;
@@ -53,9 +59,7 @@ export default function Dashboard() {
       <header className="border-b bg-card">
         <div className="container flex items-center justify-between py-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-              <Smartphone className="h-5 w-5 text-primary" />
-            </div>
+            <img src={logo} alt="Iku Gadget & Stuff" width={44} height={44} className="rounded-lg" />
             <div>
               <h1 className="text-lg font-bold">Iku Gadget & Stuff</h1>
               <div className="flex items-center gap-2">
@@ -64,9 +68,12 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-          <Button variant="ghost" size="sm" onClick={handleLogout}>
-            <LogOut className="mr-2 h-4 w-4" /> Keluar
-          </Button>
+          <div className="flex items-center gap-2">
+            {isAdmin && <NotificationBell />}
+            <Button variant="ghost" size="sm" onClick={handleLogout}>
+              <LogOut className="mr-2 h-4 w-4" /> Keluar
+            </Button>
+          </div>
         </div>
       </header>
 
@@ -111,6 +118,8 @@ export default function Dashboard() {
             </CardContent>
           </Card>
         </div>
+
+        <WeeklySalesChart data={data} />
 
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold">Jurnal Penjualan</h2>
