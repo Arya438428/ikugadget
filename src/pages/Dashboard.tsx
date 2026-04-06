@@ -23,6 +23,7 @@ export default function Dashboard() {
   const { isAdmin, role } = useRole();
   const navigate = useNavigate();
   const [data, setData] = useState<any[]>([]);
+  const [filteredData, setFilteredData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [editData, setEditData] = useState<any>(null);
   const [editOpen, setEditOpen] = useState(false);
