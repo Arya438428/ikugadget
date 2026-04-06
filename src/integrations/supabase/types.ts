@@ -14,7 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      journal: {
+        Row: {
+          biaya_operasional: number
+          created_at: string
+          harga_beli: number
+          harga_jual: number
+          id: string
+          jenis_unit: string
+          keterangan_biaya: string | null
+          nama_seller: string
+          nama_unit: string
+          tanggal: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          biaya_operasional?: number
+          created_at?: string
+          harga_beli?: number
+          harga_jual?: number
+          id?: string
+          jenis_unit?: string
+          keterangan_biaya?: string | null
+          nama_seller: string
+          nama_unit: string
+          tanggal?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          biaya_operasional?: number
+          created_at?: string
+          harga_beli?: number
+          harga_jual?: number
+          id?: string
+          jenis_unit?: string
+          keterangan_biaya?: string | null
+          nama_seller?: string
+          nama_unit?: string
+          tanggal?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
