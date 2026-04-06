@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      incentive_config: {
+        Row: {
+          bonus_percentage: number
+          id: string
+          target_units: number
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          bonus_percentage?: number
+          id?: string
+          target_units?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          bonus_percentage?: number
+          id?: string
+          target_units?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       journal: {
         Row: {
           biaya_operasional: number
