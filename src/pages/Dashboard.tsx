@@ -8,6 +8,7 @@ import { useRole } from "@/hooks/useRole";
 import { useSellerVisitLogger } from "@/hooks/useSellerVisitLogger";
 import { signOut } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
+import JournalFilters from "@/components/JournalFilters";
 import JournalForm from "@/components/JournalForm";
 import JournalTable from "@/components/JournalTable";
 import WeeklySalesChart from "@/components/WeeklySalesChart";
