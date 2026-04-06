@@ -169,10 +169,12 @@ export default function Dashboard() {
           {isAdmin && <JournalForm onSuccess={fetchData} />}
         </div>
 
+        <JournalFilters data={data} onFiltered={setFilteredData} />
+
         {loading ? (
           <div className="text-center py-8 text-muted-foreground">Memuat data...</div>
         ) : (
-          <JournalTable data={data} onRefresh={fetchData} onEdit={handleEdit} isAdmin={isAdmin} />
+          <JournalTable data={filteredData} onRefresh={fetchData} onEdit={handleEdit} isAdmin={isAdmin} />
         )}
 
         {isAdmin && (
