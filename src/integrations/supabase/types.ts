@@ -59,6 +59,30 @@ export type Database = {
         }
         Relationships: []
       }
+      seller_visits: {
+        Row: {
+          id: string
+          seen: boolean
+          seller_email: string
+          seller_user_id: string
+          visited_at: string
+        }
+        Insert: {
+          id?: string
+          seen?: boolean
+          seller_email: string
+          seller_user_id: string
+          visited_at?: string
+        }
+        Update: {
+          id?: string
+          seen?: boolean
+          seller_email?: string
+          seller_user_id?: string
+          visited_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
