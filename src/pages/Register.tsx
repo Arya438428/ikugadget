@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { signUp } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -13,7 +12,6 @@ import { Smartphone } from "lucide-react";
 export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState<"admin" | "seller">("seller");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -23,12 +21,8 @@ export default function Register() {
     try {
       const data = await signUp(email, password);
       if (data.user) {
-        const { error: roleError } = await supabase.from("user_roles").insert({ user_id: data.user.id, role });
+        const { error: roleError } = await supabase.from("user_roles").insert({ user_id: data.user.id, role: "seller" });
         if (roleError) {
-          if (roleError.message?.includes("admin")) {
-            toast.error("Sudah ada admin terdaftar. Hanya boleh 1 admin.");
-            return;
-          }
           throw roleError;
         }
       }
@@ -60,16 +54,6 @@ export default function Register() {
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <Input id="password" type="password" placeholder="Min. 6 karakter" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
-            </div>
-            <div className="space-y-2">
-              <Label>Role</Label>
-              <Select value={role} onValueChange={(v) => setRole(v as "admin" | "seller")}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="admin">Admin</SelectItem>
-                  <SelectItem value="seller">Seller</SelectItem>
-                </SelectContent>
-              </Select>
             </div>
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Memproses..." : "Daftar"}
