@@ -3,10 +3,10 @@ import { render, waitFor } from "@testing-library/react";
 import React from "react";
 
 // --- Mock supabase client ---
-const onMock = vi.fn().mockReturnThis();
-const subscribeMock = vi.fn().mockReturnThis();
-const channelMock = vi.fn(() => ({ on: onMock, subscribe: subscribeMock }));
-const removeChannelMock = vi.fn();
+const onMock: any = vi.fn().mockReturnThis();
+const subscribeMock: any = vi.fn().mockReturnThis();
+const channelMock: any = vi.fn((_name?: string) => ({ on: onMock, subscribe: subscribeMock }));
+const removeChannelMock: any = vi.fn((_ch?: any) => {});
 
 // Simulated server-side data (RLS-aware mock)
 const ALL_VISITS = [
@@ -17,7 +17,7 @@ const ALL_VISITS = [
 let currentUserId = "seller-1";
 let currentIsAdmin = false;
 
-const fromMock = vi.fn(() => {
+const fromMock: any = vi.fn((_table?: string) => {
   const builder: any = {
     _rows: ALL_VISITS,
     select: vi.fn().mockReturnThis(),
