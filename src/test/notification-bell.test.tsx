@@ -37,9 +37,9 @@ const fromMock = vi.fn(() => {
 
 vi.mock("@/integrations/supabase/client", () => ({
   supabase: {
-    from: (...args: any[]) => fromMock(...args),
-    channel: (...args: any[]) => channelMock(...args),
-    removeChannel: (...args: any[]) => removeChannelMock(...args),
+    from: (table: string) => fromMock(table),
+    channel: (name: string) => channelMock(name),
+    removeChannel: (ch: any) => removeChannelMock(ch),
     auth: { onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }), getSession: () => Promise.resolve({ data: { session: null } }) },
   },
 }));
