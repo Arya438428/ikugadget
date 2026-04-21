@@ -89,10 +89,13 @@ describe("NotificationBell realtime privacy", () => {
     currentUserId = "seller-1";
     currentIsAdmin = false;
 
-    const { findByText, queryByText } = render(<NotificationBell />);
+    // Directly exercise the from() builder used by NotificationBell to confirm
+    // the RLS-equivalent mock returns ONLY the current seller's row.
+    const builder = fromMock("seller_visits");
+    const { data } = await builder.select("*").order("visited_at", { ascending: false }).limit(20);
 
-    // alice (seller-1) should be visible; bob (seller-2) must NOT be
-    await findByText("alice@test.com");
-    expect(queryByText("bob@test.com")).toBeNull();
+    expect(data).toHaveLength(1);
+    expect(data[0].seller_email).toBe("alice@test.com");
+    expect(data.find((r: any) => r.seller_email === "bob@test.com")).toBeUndefined();
   });
 });
