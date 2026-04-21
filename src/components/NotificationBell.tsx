@@ -9,6 +9,8 @@ import {
 } from "@/components/ui/popover";
 import { supabase } from "@/integrations/supabase/client";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useAuth } from "@/hooks/useAuth";
+import { useRole } from "@/hooks/useRole";
 
 interface Visit {
   id: string;
@@ -20,6 +22,8 @@ interface Visit {
 export default function NotificationBell() {
   const [visits, setVisits] = useState<Visit[]>([]);
   const [open, setOpen] = useState(false);
+  const { user } = useAuth();
+  const { isAdmin, loading: roleLoading } = useRole();
 
   const fetchVisits = async () => {
     const { data } = await supabase
@@ -31,13 +35,19 @@ export default function NotificationBell() {
   };
 
   useEffect(() => {
+    if (roleLoading || !user) return;
     fetchVisits();
+
+    // Admins receive all visit events; sellers only receive their own rows.
+    // RLS on seller_visits already enforces this server-side, but we add an
+    // explicit filter so non-matching rows are never sent over the channel.
+    const filter = isAdmin ? undefined : `seller_user_id=eq.${user.id}`;
 
     const channel = supabase
       .channel("seller-visits-realtime")
       .on(
         "postgres_changes",
-        { event: "INSERT", schema: "public", table: "seller_visits" },
+        { event: "INSERT", schema: "public", table: "seller_visits", ...(filter ? { filter } : {}) },
         (payload) => {
           setVisits((prev) => [payload.new as Visit, ...prev].slice(0, 20));
         }
@@ -47,7 +57,7 @@ export default function NotificationBell() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [user, isAdmin, roleLoading]);
 
   const unseenCount = visits.filter((v) => !v.seen).length;
 
