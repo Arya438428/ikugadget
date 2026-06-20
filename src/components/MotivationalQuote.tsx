@@ -25,10 +25,10 @@ export default function MotivationalQuote() {
   }, []);
 
   return (
-    <Card className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border-primary/20">
+    <Card className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border-primary/20 transition-all duration-300 hover:shadow-md hover:border-primary/40">
       <CardContent className="flex items-center gap-3 p-4">
         <div className="rounded-full bg-primary/20 p-2 shrink-0">
-          <Sparkles className="h-5 w-5 text-primary" />
+          <Sparkles className="h-5 w-5 text-primary iku-sparkle" />
         </div>
         <p className="text-sm font-medium italic text-foreground">{quote}</p>
       </CardContent>

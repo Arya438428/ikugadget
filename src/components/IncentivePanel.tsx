@@ -37,6 +37,7 @@ export default function IncentivePanel({ data, isAdmin }: IncentivePanelProps) {
   const [editBonus, setEditBonus] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [barsVisible, setBarsVisible] = useState(false);
 
   useEffect(() => {
     const fetchConfig = async () => {
@@ -53,6 +54,13 @@ export default function IncentivePanel({ data, isAdmin }: IncentivePanelProps) {
     };
     fetchConfig();
   }, []);
+
+  useEffect(() => {
+    if (data.length > 0) {
+      const t = setTimeout(() => setBarsVisible(true), 300);
+      return () => clearTimeout(t);
+    }
+  }, [data.length]);
 
   const handleSave = async () => {
     if (!config) return;
@@ -171,10 +179,13 @@ export default function IncentivePanel({ data, isAdmin }: IncentivePanelProps) {
                     {s.unit_count}/{config.target_units} unit
                   </span>
                 </div>
-                <div className="w-full bg-muted rounded-full h-2">
+                <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
                   <div
-                    className={`h-2 rounded-full transition-all ${achieved ? "bg-primary" : "bg-primary/50"}`}
-                    style={{ width: `${progress}%` }}
+                    className={`h-2 rounded-full ${achieved ? "bg-primary" : "bg-primary/50"}`}
+                    style={{
+                      width: barsVisible ? `${progress}%` : "0%",
+                      transition: "width 1s cubic-bezier(0.16,1,0.3,1)",
+                    }}
                   />
                 </div>
                 {achieved && (
