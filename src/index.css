@@ -136,6 +136,11 @@
   pointer-events: none;
 }
 
+/* Stat card glow on hover */
+.hover\:shadow-blue-500\/10:hover   { --tw-shadow-color: rgb(59 130 246 / 0.1); }
+.hover\:shadow-orange-500\/10:hover { --tw-shadow-color: rgb(249 115 22 / 0.1); }
+.hover\:shadow-violet-500\/10:hover { --tw-shadow-color: rgb(139 92 246 / 0.1); }
+
 /* Animation delay helpers */
 .delay-50  { animation-delay:  50ms; }
 .delay-100 { animation-delay: 100ms; }

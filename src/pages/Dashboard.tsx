@@ -15,7 +15,7 @@ import WeeklySalesChart from "@/components/WeeklySalesChart";
 import NotificationBell from "@/components/NotificationBell";
 import MotivationalQuote from "@/components/MotivationalQuote";
 import IncentivePanel from "@/components/IncentivePanel";
-import { LogOut, TrendingUp, ShoppingBag, DollarSign, Wallet } from "lucide-react";
+import { LogOut, TrendingUp, ShoppingBag, DollarSign, Wallet, Menu } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 function useCountUp(end: number, duration = 1200, delay = 300) {
@@ -86,26 +86,35 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/30">
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background">
+      {/* Top accent bar */}
+      <div className="h-1 w-full bg-gradient-to-r from-primary via-primary/70 to-primary/30" />
+
       {/* Header */}
-      <header className="border-b bg-card/80 backdrop-blur-sm sticky top-0 z-50 iku-fade-down">
+      <header className="border-b bg-card/90 backdrop-blur-sm sticky top-0 z-50 iku-fade-down shadow-sm">
         <div className="container flex items-center justify-between py-3">
           <div className="flex items-center gap-3">
-            <img
-              src={logo}
-              alt="Iku Gadget & Stuff"
-              width={48}
-              height={48}
-              className="rounded-xl shadow-md transition-all duration-300 hover:scale-110 hover:rotate-3 hover:shadow-primary/20"
-            />
+            <div className="relative">
+              <img
+                src={logo}
+                alt="Iku Gadget & Stuff"
+                width={44}
+                height={44}
+                className="rounded-xl shadow-md shadow-primary/20 transition-all duration-300 hover:scale-110 hover:rotate-3"
+              />
+              <span className="absolute -bottom-0.5 -right-0.5 flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-50" />
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-primary" />
+              </span>
+            </div>
             <div>
-              <h1 className="text-lg font-bold tracking-tight">Iku Gadget & Stuff</h1>
-              <div className="flex items-center gap-2">
-                <p className="text-xs text-muted-foreground">{user?.email}</p>
+              <h1 className="text-base font-bold tracking-tight leading-none">Iku Gadget & Stuff</h1>
+              <div className="flex items-center gap-2 mt-1">
+                <p className="text-xs text-muted-foreground truncate max-w-[160px]">{user?.email}</p>
                 {role && (
                   <Badge
                     variant={role === "admin" ? "default" : "secondary"}
-                    className="text-[10px] px-1.5 py-0"
+                    className="text-[10px] px-1.5 py-0 capitalize"
                   >
                     {role}
                   </Badge>
@@ -119,9 +128,9 @@ export default function Dashboard() {
               variant="ghost"
               size="sm"
               onClick={handleLogout}
-              className="transition-all duration-200 hover:translate-x-0.5"
+              className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all duration-200"
             >
-              <LogOut className="mr-2 h-4 w-4" /> Keluar
+              <LogOut className="mr-1.5 h-4 w-4" /> Keluar
             </Button>
           </div>
         </div>
@@ -135,70 +144,65 @@ export default function Dashboard() {
 
         {/* Summary Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          {/* Transaksi — blue */}
           <div className="iku-fade-up delay-200">
-            <Card className="overflow-hidden iku-shimmer-card transition-all duration-300 hover:scale-105 hover:shadow-lg hover:-translate-y-1 cursor-default">
+            <Card className="overflow-hidden iku-shimmer-card border-blue-200/60 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/10 hover:-translate-y-1 cursor-default">
               <CardContent className="flex items-center gap-3 p-4 relative">
-                <div className="absolute -right-3 -top-3 h-16 w-16 rounded-full bg-primary/5" />
-                <div className="rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 p-2.5 iku-float">
-                  <ShoppingBag className="h-5 w-5 text-primary" />
+                <div className="absolute -right-4 -top-4 h-20 w-20 rounded-full bg-blue-500/8" />
+                <div className="rounded-xl bg-gradient-to-br from-blue-500/20 to-blue-500/10 p-2.5 iku-float shadow-sm">
+                  <ShoppingBag className="h-5 w-5 text-blue-600" />
                 </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">Transaksi</p>
-                  <p className="text-2xl font-bold tabular-nums">{animTx}</p>
+                <div className="min-w-0">
+                  <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Transaksi</p>
+                  <p className="text-2xl font-bold tabular-nums text-blue-700">{animTx}</p>
                 </div>
               </CardContent>
             </Card>
           </div>
 
+          {/* Penjualan — green (primary) */}
           <div className="iku-fade-up delay-300">
-            <Card className="overflow-hidden iku-shimmer-card transition-all duration-300 hover:scale-105 hover:shadow-lg hover:-translate-y-1 cursor-default">
+            <Card className="overflow-hidden iku-shimmer-card border-primary/20 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-1 cursor-default">
               <CardContent className="flex items-center gap-3 p-4 relative">
-                <div className="absolute -right-3 -top-3 h-16 w-16 rounded-full bg-primary/5" />
-                <div
-                  className="rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 p-2.5 iku-float"
-                  style={{ animationDelay: "0.4s" }}
-                >
+                <div className="absolute -right-4 -top-4 h-20 w-20 rounded-full bg-primary/8" />
+                <div className="rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 p-2.5 iku-float shadow-sm" style={{ animationDelay: "0.4s" }}>
                   <DollarSign className="h-5 w-5 text-primary" />
                 </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">Penjualan</p>
-                  <p className="text-lg font-bold tabular-nums">Rp {animJual.toLocaleString("id-ID")}</p>
+                <div className="min-w-0">
+                  <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Penjualan</p>
+                  <p className="text-base font-bold tabular-nums text-primary leading-tight">Rp {animJual.toLocaleString("id-ID")}</p>
                 </div>
               </CardContent>
             </Card>
           </div>
 
+          {/* Biaya Op — orange */}
           <div className="iku-fade-up delay-400">
-            <Card className="overflow-hidden iku-shimmer-card transition-all duration-300 hover:scale-105 hover:shadow-lg hover:-translate-y-1 cursor-default">
+            <Card className="overflow-hidden iku-shimmer-card border-orange-200/60 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-orange-500/10 hover:-translate-y-1 cursor-default">
               <CardContent className="flex items-center gap-3 p-4 relative">
-                <div className="absolute -right-3 -top-3 h-16 w-16 rounded-full bg-destructive/5" />
-                <div
-                  className="rounded-xl bg-gradient-to-br from-destructive/20 to-destructive/10 p-2.5 iku-float"
-                  style={{ animationDelay: "0.8s" }}
-                >
-                  <Wallet className="h-5 w-5 text-destructive" />
+                <div className="absolute -right-4 -top-4 h-20 w-20 rounded-full bg-orange-500/8" />
+                <div className="rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-500/10 p-2.5 iku-float shadow-sm" style={{ animationDelay: "0.8s" }}>
+                  <Wallet className="h-5 w-5 text-orange-600" />
                 </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">Biaya Op.</p>
-                  <p className="text-lg font-bold tabular-nums">Rp {animOp.toLocaleString("id-ID")}</p>
+                <div className="min-w-0">
+                  <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Biaya Op.</p>
+                  <p className="text-base font-bold tabular-nums text-orange-600 leading-tight">Rp {animOp.toLocaleString("id-ID")}</p>
                 </div>
               </CardContent>
             </Card>
           </div>
 
+          {/* Profit — violet (merah jika rugi) */}
           <div className="iku-fade-up delay-500">
-            <Card className="overflow-hidden iku-shimmer-card transition-all duration-300 hover:scale-105 hover:shadow-lg hover:-translate-y-1 cursor-default">
+            <Card className={`overflow-hidden iku-shimmer-card transition-all duration-300 hover:scale-105 hover:shadow-lg hover:-translate-y-1 cursor-default ${totalProfit >= 0 ? "border-violet-200/60 hover:shadow-violet-500/10" : "border-destructive/20 hover:shadow-destructive/10"}`}>
               <CardContent className="flex items-center gap-3 p-4 relative">
-                <div className="absolute -right-3 -top-3 h-16 w-16 rounded-full bg-primary/5" />
-                <div
-                  className="rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 p-2.5 iku-float"
-                  style={{ animationDelay: "1.2s" }}
-                >
-                  <TrendingUp className="h-5 w-5 text-primary" />
+                <div className={`absolute -right-4 -top-4 h-20 w-20 rounded-full ${totalProfit >= 0 ? "bg-violet-500/8" : "bg-destructive/8"}`} />
+                <div className={`rounded-xl p-2.5 iku-float shadow-sm ${totalProfit >= 0 ? "bg-gradient-to-br from-violet-500/20 to-violet-500/10" : "bg-gradient-to-br from-destructive/20 to-destructive/10"}`} style={{ animationDelay: "1.2s" }}>
+                  <TrendingUp className={`h-5 w-5 ${totalProfit >= 0 ? "text-violet-600" : "text-destructive"}`} />
                 </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">Profit</p>
-                  <p className={`text-lg font-bold tabular-nums ${totalProfit >= 0 ? "text-primary" : "text-destructive"}`}>
+                <div className="min-w-0">
+                  <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Profit</p>
+                  <p className={`text-base font-bold tabular-nums leading-tight ${totalProfit >= 0 ? "text-violet-700" : "text-destructive"}`}>
                     Rp {animProfit.toLocaleString("id-ID")}
                   </p>
                 </div>
@@ -220,7 +224,10 @@ export default function Dashboard() {
         {/* Journal Section */}
         <div className="iku-fade-up delay-700 space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold">Jurnal Penjualan</h2>
+            <div>
+              <h2 className="text-xl font-bold tracking-tight">Jurnal Penjualan</h2>
+              <p className="text-xs text-muted-foreground mt-0.5">{data.length} transaksi tercatat</p>
+            </div>
             {isAdmin && <JournalForm onSuccess={fetchData} />}
           </div>
 
