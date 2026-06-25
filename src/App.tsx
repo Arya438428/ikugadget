@@ -8,12 +8,14 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
+import CursorEffect from "./components/CursorEffect";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
+      <CursorEffect />
       <Toaster />
       <Sonner />
       <BrowserRouter>

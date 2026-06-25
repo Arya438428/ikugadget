@@ -136,6 +136,81 @@
   pointer-events: none;
 }
 
+/* ── Custom Cursor (desktop only) ── */
+@media (pointer: fine) {
+  * { cursor: none !important; }
+
+  .iku-cursor-dot {
+    position: fixed;
+    width: 7px;
+    height: 7px;
+    background: hsl(160, 60%, 45%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+    will-change: left, top;
+  }
+
+  .iku-cursor-ring {
+    position: fixed;
+    width: 38px;
+    height: 38px;
+    border: 2px solid hsl(160, 60%, 45%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99998;
+    transform: translate(-50%, -50%);
+    transition: width 0.22s ease, height 0.22s ease, background-color 0.22s ease;
+    will-change: left, top;
+  }
+}
+
+/* ── Scroll Reveal ── */
+.sr {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+}
+.sr-left  { opacity: 0; transform: translateX(-36px); transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+.sr-right { opacity: 0; transform: translateX(36px);  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+.sr.visible, .sr-left.visible, .sr-right.visible {
+  opacity: 1;
+  transform: translateY(0) translateX(0);
+}
+.sr-d1 { transition-delay: 0.1s; }
+.sr-d2 { transition-delay: 0.2s; }
+.sr-d3 { transition-delay: 0.3s; }
+.sr-d4 { transition-delay: 0.4s; }
+.sr-d5 { transition-delay: 0.5s; }
+
+/* ── Slide-in background (section bg yang geser ke atas saat scroll) ── */
+.slide-bg-wrap { position: relative; overflow: hidden; }
+.slide-bg-panel {
+  position: absolute;
+  inset: 0;
+  transform: translateY(100%);
+  transition: transform 0.9s cubic-bezier(0.16,1,0.3,1);
+  z-index: 0;
+}
+.slide-bg-panel.visible { transform: translateY(0); }
+
+/* ── Scroll progress bar ── */
+#scroll-progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, hsl(160,60%,45%), hsl(160,80%,65%));
+  z-index: 99997;
+  transition: width 0.1s linear;
+}
+
+/* ── Marquee ── */
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.marquee-track { animation: marquee 18s linear infinite; }
+.marquee-track:hover { animation-play-state: paused; }
+
 /* Stat card glow on hover */
 .hover\:shadow-blue-500\/10:hover   { --tw-shadow-color: rgb(59 130 246 / 0.1); }
 .hover\:shadow-orange-500\/10:hover { --tw-shadow-color: rgb(249 115 22 / 0.1); }
