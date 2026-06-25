@@ -17,5 +17,6 @@ export default function Index() {
     return <Navigate to="/login" replace />;
   }
 
+
   return <Dashboard />;
 }

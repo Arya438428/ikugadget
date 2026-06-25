@@ -26,7 +26,7 @@ export default function Register() {
         if (roleError) throw roleError;
       }
       toast.success("Akun berhasil dibuat!");
-      navigate("/");
+      navigate("/dashboard");
     } catch (err: any) {
       toast.error(err.message || "Gagal mendaftar");
     } finally {
