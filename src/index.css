@@ -169,14 +169,17 @@
 /* ── Scroll Reveal ── */
 .sr {
   opacity: 0;
-  transform: translateY(36px);
-  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+  transform: translateY(38px) scale(0.985);
+  filter: blur(4px);
+  will-change: opacity, transform, filter;
+  transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1), transform 0.9s cubic-bezier(0.22,1,0.36,1), filter 0.9s ease;
 }
-.sr-left  { opacity: 0; transform: translateX(-36px); transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
-.sr-right { opacity: 0; transform: translateX(36px);  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+.sr-left  { opacity: 0; transform: translateX(-44px) scale(0.985); filter: blur(4px); will-change: opacity, transform, filter; transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1), transform 0.9s cubic-bezier(0.22,1,0.36,1), filter 0.9s ease; }
+.sr-right { opacity: 0; transform: translateX(44px) scale(0.985);  filter: blur(4px); will-change: opacity, transform, filter; transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1), transform 0.9s cubic-bezier(0.22,1,0.36,1), filter 0.9s ease; }
 .sr.visible, .sr-left.visible, .sr-right.visible {
   opacity: 1;
-  transform: translateY(0) translateX(0);
+  transform: translateY(0) translateX(0) scale(1);
+  filter: blur(0);
 }
 .sr-d1 { transition-delay: 0.1s; }
 .sr-d2 { transition-delay: 0.2s; }
@@ -229,3 +232,249 @@
 .delay-600 { animation-delay: 600ms; }
 .delay-700 { animation-delay: 700ms; }
 .delay-800 { animation-delay: 800ms; }
+
+/* ── Intro Splash ── */
+@keyframes intro-float {
+  0%,100% { transform: translateY(0) rotate(0deg); }
+  33%     { transform: translateY(-22px) rotate(5deg); }
+  66%     { transform: translateY(12px) rotate(-4deg); }
+}
+
+@keyframes intro-logo {
+  from { opacity:0; transform: scale(0.4) rotate(-12deg); }
+  to   { opacity:1; transform: scale(1) rotate(0deg); }
+}
+
+@keyframes intro-up {
+  from { opacity:0; transform: translateY(22px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+
+@keyframes intro-bar {
+  from { width:0%; }
+  to   { width:100%; }
+}
+
+/* ── Orbit Selector (intro) ── */
+@keyframes orbit-spin    { to { transform: rotate(360deg);  } }
+@keyframes orbit-counter { to { transform: rotate(-360deg); } }
+
+.orbit-zone { animation: orbit-in 0.85s cubic-bezier(0.16,1,0.3,1) both; }
+@keyframes orbit-in { from { opacity:0; transform: scale(0.6); } to { opacity:1; transform: scale(1); } }
+
+.orbit-ring {
+  position: absolute;
+  top: 50%; left: 50%;
+  animation: orbit-spin 38s linear infinite;
+  will-change: transform;
+}
+.orbit-planet {
+  position: absolute;
+  top: 50%; left: 50%;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 0;
+  overflow: visible;
+}
+.orbit-counter { animation: orbit-counter 38s linear infinite; will-change: transform; }
+
+/* Efek kedalaman ruang angkasa: planet membesar/terang saat di depan, mengecil/redup di belakang */
+@keyframes orbit-depth {
+  0%, 100% { transform: scale(0.74); opacity: 0.5;  filter: brightness(0.7); }
+  50%      { transform: scale(1.18); opacity: 1;    filter: brightness(1.12); }
+}
+.orbit-depth { animation: orbit-depth 38s linear infinite; will-change: transform, opacity, filter; }
+.orbit-face  { transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s ease; }
+
+/* Hover di area orbit → berhenti berputar biar gampang diklik */
+.orbit-zone:hover .orbit-ring,
+.orbit-zone:hover .orbit-counter,
+.orbit-zone:hover .orbit-depth { animation-play-state: paused; }
+.orbit-planet:hover .orbit-face { transform: scale(1.1); }
+
+/* ── Space background ── */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.12; }
+  50%      { opacity: 0.95; }
+}
+.star {
+  position: absolute;
+  background: #fff;
+  border-radius: 50%;
+  animation: twinkle 3s ease-in-out infinite;
+}
+@keyframes shoot {
+  0%   { transform: translate(0,0) rotate(22deg);        opacity: 0; }
+  6%   { opacity: 1; }
+  24%  { transform: translate(420px,180px) rotate(22deg); opacity: 0; }
+  100% { opacity: 0; }
+}
+.shooting-star {
+  position: absolute;
+  width: 100px; height: 2px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.95), transparent);
+  border-radius: 2px;
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.8));
+  opacity: 0;
+  animation: shoot 8s ease-in infinite;
+  pointer-events: none;
+}
+@keyframes nebula-drift {
+  0%, 100% { transform: translate(0,0) scale(1); }
+  50%      { transform: translate(34px,-22px) scale(1.14); }
+}
+.nebula {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(64px);
+  pointer-events: none;
+  animation: nebula-drift 16s ease-in-out infinite;
+}
+
+/* ── Product Modal ── */
+@keyframes modal-slide-up {
+  from { transform: translateY(60px); opacity:0; }
+  to   { transform: translateY(0);    opacity:1; }
+}
+.modal-slide-up { animation: modal-slide-up 0.4s cubic-bezier(0.16,1,0.3,1); }
+
+/* ── Cart drawer slide-in ── */
+@keyframes cart-in { from { transform: translateX(100%); } to { transform: translateX(0); } }
+.cart-slide { animation: cart-in 0.38s cubic-bezier(0.16,1,0.3,1); }
+
+/* ── Hero Slide ── */
+@keyframes hero-ken-burns {
+  0%   { transform: scale(1)   translateX(0); }
+  100% { transform: scale(1.04) translateX(-1%); }
+}
+.hero-bg-active {
+  animation: hero-ken-burns 6s ease-in-out infinite alternate;
+}
+
+/* ── Magnetic cursor expand on product cards ── */
+@media (pointer: fine) {
+  .product-card:hover ~ .iku-cursor-ring,
+  .product-card:hover .iku-cursor-ring {
+    width: 72px !important;
+    height: 72px !important;
+  }
+}
+
+/* ── Glassmorphism filter ── */
+.filter-glass {
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+.dark .filter-glass {
+  background: rgba(15,23,42,0.6);
+}
+
+/* ── Product card shimmer on hover ── */
+@keyframes card-shimmer {
+  from { transform: translateX(-200%) skewX(-15deg); }
+  to   { transform: translateX(200%)  skewX(-15deg); }
+}
+.product-card { position: relative; overflow: hidden; }
+.product-card::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent);
+  transform: translateX(-200%) skewX(-15deg);
+  pointer-events: none;
+}
+.product-card:hover::after {
+  animation: card-shimmer 0.6s ease forwards;
+}
+
+/* ════════════════════════════════════════════════════════
+   ELEGANCE PACK — animasi mandiri biar UI/UX makin mewah
+   ════════════════════════════════════════════════════════ */
+html { scroll-behavior: smooth; }
+
+/* Aurora gradient bergerak (background section) */
+@keyframes aurora-move {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.aurora {
+  background: linear-gradient(120deg,#10b981,#3b82f6,#8b5cf6,#10b981);
+  background-size: 300% 300%;
+  animation: aurora-move 16s ease infinite;
+}
+.aurora-strong {
+  background: linear-gradient(120deg,#0ea371,#2563eb,#7c3aed,#0ea371);
+  background-size: 280% 280%;
+  animation: aurora-move 12s ease infinite;
+}
+
+/* Teks gradient beranimasi */
+@keyframes gradient-text {
+  0%,100% { background-position: 0% 50%; }
+  50%     { background-position: 100% 50%; }
+}
+.text-aurora {
+  background: linear-gradient(90deg,#10b981,#3b82f6,#8b5cf6,#10b981);
+  background-size: 200% auto;
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent;
+  animation: gradient-text 6s linear infinite;
+}
+
+/* Float lembut untuk produk sorotan */
+@keyframes iku-float-soft {
+  0%,100% { transform: translateY(0)    rotate(-1deg); }
+  50%     { transform: translateY(-16px) rotate(1.2deg); }
+}
+.iku-float-soft { animation: iku-float-soft 5.5s ease-in-out infinite; }
+
+/* Tilt 3D (transform & transition di-set via JS biar tidak bentrok dengan reveal .sr) */
+[data-tilt] {
+  position: relative;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+/* Cahaya halus mengikuti kursor */
+[data-tilt]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(220px circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,0.16), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+  z-index: 30;
+}
+[data-tilt]:hover::after { opacity: 1; }
+
+/* Glow pulse halus */
+@keyframes glow-pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.35); }
+  50%     { box-shadow: 0 0 0 12px rgba(34,197,94,0); }
+}
+.glow-pulse { animation: glow-pulse 2.4s ease-out infinite; }
+
+/* Shine sweep untuk banner */
+@keyframes shine-sweep {
+  0%   { transform: translateX(-120%) skewX(-20deg); }
+  60%,100% { transform: translateX(220%) skewX(-20deg); }
+}
+.shine-host { position: relative; overflow: hidden; }
+.shine-host::before {
+  content:"";
+  position:absolute; top:0; left:0; height:100%; width:55%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
+  transform: translateX(-120%) skewX(-20deg);
+  animation: shine-sweep 5s ease-in-out infinite;
+  pointer-events:none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora, .aurora-strong, .text-aurora, .iku-float-soft, .glow-pulse, .shine-host::before { animation: none !important; }
+}

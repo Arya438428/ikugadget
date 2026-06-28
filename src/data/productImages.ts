@@ -1,0 +1,23 @@
+export const PRODUCT_IMG: Record<number, string> = {
+  "1": "/products/1.png",
+  "2": "/products/2.png",
+  "3": "/products/3.png",
+  "4": "/products/4.png",
+  "5": "/products/5.png",
+  "6": "/products/6.png",
+  "7": "/products/7.jpg",
+  "8": "/products/8.jpg",
+  "9": "/products/9.jpg",
+  "10": "/products/10.png",
+  "11": "/products/11.jpg",
+  "12": "/products/12.jpg",
+  "13": "/products/13.jpg",
+  "14": "/products/14.jpg",
+  "15": "/products/15.png",
+  "16": "/products/16.png",
+  "17": "/products/17.png",
+  "18": "/products/18.png",
+  "19": "/products/19.jpg",
+  "20": "/products/20.jpg",
+  "21": "/products/21.jpg"
+};
